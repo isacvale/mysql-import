@@ -12,9 +12,10 @@ const mysql = require('mysql');
 const fs = require('fs');
 
 class importer{
-	constructor(conn, err_handler){
+	constructor(conn, err_handler, log_callback){
 		this.conn = conn;
 		this.err_handler = err_handler;
+		this.log_callback = log_callback;
 	}
 	import(filename){
 		var queriesString = fs.readFileSync(filename, 'utf8');
@@ -26,13 +27,27 @@ class importer{
 				this.conn.query(q, err=>{
 					/* istanbul ignore next */
 					if (err) this.err_handler(err); 
-					else d();
+					else{
+						if(!this.log_callback && typeof this.log_callback === "function")
+							this.log_callback();
+						d();
+					}
 				});
 			}catch(e){
 				/* istanbul ignore next */
 				this.err_handler(e); 
 			}
 		});
+	}
+	measureImport(filename){
+		var queriesString = fs.readFileSync(filename, 'utf8');
+		
+		var queries = parseQueries(queriesString);
+		
+		return queries.length;		
+	}
+	endConnection(){
+		this.conn.end();
 	}
 }
 importer.version = '1.0.9';

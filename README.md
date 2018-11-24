@@ -3,6 +3,18 @@
 
 # mysql-import
 
+This is a fork aimed at proposing two simple features to a great little module. I'm leaving its original README intact below.
+The two features are:
+
+ - an importer.endConnection() function is exposed, so you don't have to go importer.conn.end(), which would require knowing a bit of the inner workings; and
+ - added a importer.measureImport() function that returns the number of queries, and added a third (optional) parameter to importer.construct() . This parameter is a callback that runs after each single successful query. These two modifications combined are meant to allow the user to output a loading bar, as the import process can take a while (it relies on a slowLoop of try and catch, after all).
+ 
+ isacvale
+ 
+ 
+ v-- original README below --v
+ 
+    
 *Version 1.0.9* 
 
 [![Build Status](https://api.travis-ci.org/Pamblam/mysql-import.svg?branch=master)](https://travis-ci.org/Pamblam/mysql-import/) [![Coverage Status](https://coveralls.io/repos/github/Pamblam/mysql-import/badge.svg?branch=master)](https://coveralls.io/github/Pamblam/mysql-import?branch=master)
